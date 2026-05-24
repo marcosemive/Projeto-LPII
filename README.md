@@ -10,4 +10,4 @@ A plataforma conecta dois tipos de usuários: **chefs**, que publicam e gerencia
 [Acesse a página inicial](https://marcosemive.github.io/Receitoteca/public/paginainicial.html)
 
 ### Modelagem de Dados
-[Diagrama ERD](docs/erd-diagram.png)
+![Diagrama ERD](docs/erd-diagram.png)
