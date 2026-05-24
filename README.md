@@ -1,6 +1,6 @@
 # Receitoteca 👨‍🍳
 
-Receitoteca é uma aplicação web para descoberta e compartilhamento de receitas culinárias, desenvolvida como projeto da disciplina de Linguagem de Programação II no IFPB.
+Receitoteca é uma aplicação web para descoberta e compartilhamento de receitas culináriaS.
 
 ## Sobre o projeto
 
