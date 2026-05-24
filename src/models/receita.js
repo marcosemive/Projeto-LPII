@@ -3,7 +3,6 @@ import Etiqueta from './etiqueta.js';
 import Chef from './chef.js';
 
 async function vincularEtiquetas(db, receitaId, etiquetas) {
-  // etiquetas pode ser array ['Salgada', 'Vegana'] ou string 'Salgada' (legado seed)
   const lista = Array.isArray(etiquetas) ? etiquetas : [etiquetas];
 
   await db.run(`DELETE FROM receita_etiqueta WHERE receita_id = ?`, [receitaId]);
@@ -23,7 +22,6 @@ async function create(data) {
 
   const { img, etiqueta, etiquetas, title, time, servings, chef_email, chef_id, ingredients, steps } = data;
 
-  // aceita tanto 'etiqueta' (seed/legado) quanto 'etiquetas' (novo frontend)
   const tagsInput = etiquetas || etiqueta;
 
   if (img && tagsInput && title && time && servings && ingredients && steps) {
@@ -89,7 +87,6 @@ async function readById(id) {
 
   if (!receita) throw new Error('Receita não encontrada');
 
-  // Busca todas as etiquetas da receita
   const etiquetasRows = await db.all(`
     SELECT e.id, e.nome
     FROM etiqueta e
