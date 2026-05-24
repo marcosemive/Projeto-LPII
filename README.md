@@ -1,6 +1,6 @@
 # Receitoteca 👨‍🍳
 
-Receitoteca é uma aplicação web para descoberta e compartilhamento de receitas culináriaS.
+Receitoteca é uma aplicação web para descoberta e compartilhamento de receitas culinária.
 
 ## Sobre o projeto
 
