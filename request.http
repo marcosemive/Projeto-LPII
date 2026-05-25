@@ -1,66 +1,173 @@
-@server=https://ominous-space-dollop-wr5wr59pxprgf569j-3000.app.github.dev
+@server = http://localhost:3000
 
-### Criação de Receita
-POST {{server}}/api/receitas
+### AUTENTICAÇÃO — CHEF
+
+### Cadastro de Chef
+POST {{server}}/api/auth/chef/cadastro
 Content-Type: application/json
 
 {
-    "img": "images/nigiri_salmao.jpg",
-    "tag": "Salgada",
-    "title": "Nigiri de Salmão",
-    "time": "10 min",
-    "servings": 1,
-    "author": "Paulo Benetton",
-    "ingredients": [
-      "50 gramas de Arroz Japonês",
-      "80 gramas de Salmão Cru",
-      "Sal",
-      "Vinagre de Arroz",
-      "Açúcar"
-    ],
-    "steps": [
-      "Lave o arroz com água até ela sair transparente",
-      "Tempere o arroz com uma mistura de uma pitada de sal, uma colher de sopa de açúcar, deixe descansar por 5 minutos",
-      "Corte a peça de salmão na diagonal",
-      "Monte o nigiri moldando o arroz com as mãos e posicione o salmão no topo"
-    ]
+  "nome": "Jose Leda",
+  "email": "josleda@receitoteca.com",
+  "senha": "Jose@123"
 }
 
-### Ler as Receitas
-GET {{server}}/api/receitas
+###
 
-
-### Ler uma Receita específica a partir do ID
-GET {{server}}/api/receitas/9b26577f-dfcb-4f68-b847-dac7b2d2f435
-
-
-### Alterar uma receita específica
-PUT {{server}}/api/receitas/9b26577f-dfcb-4f68-b847-dac7b2d2f435
+### Login de Chef
+# @name loginChef
+POST {{server}}/api/auth/chef/login
 Content-Type: application/json
 
 {
-    "id": "9b26577f-dfcb-4f68-b847-dac7b2d2f435",
-    "img": "images/salada.png",
-    "tag": "Vegana",
-    "title": "Salada Tropical",
-    "time": "15 min",
-    "servings": 2,
-    "author": "Gabriela Carvalho",
-    "ingredients": [
-      "Alface",
-      "Tomate cereja",
-      "Pepino",
-      "Cebola",
-      "Manga",
-      "Maçã",
-      "Azeite e sal"
-    ],
-    "steps": [
-      "Lave os ingredientes",
-      "Corte tudo",
-      "Tempere e sirva"
-    ]
-  }
+  "email": "paulo@receitoteca.com",
+  "senha": "Paulo@123"
+}
 
-### Remover uma receita pelo ID
-DELETE {{server}}/api/receitas/9b26577f-dfcb-4f68-b847-dac7b2d2f435
+###
+
+@tokenChef = {{loginChef.response.body.token}}
+
+### AUTENTICAÇÃO — USUÁRIO
+
+### Cadastro de Usuário
+POST {{server}}/api/auth/usuario/cadastro
+Content-Type: application/json
+
+{
+  "nome": "Marcos Lima",
+  "email": "marcos@receitoteca.com",
+  "senha": "Marcos@1234"
+}
+
+###
+
+### Login de Usuário
+# @name loginUsuario
+POST {{server}}/api/auth/usuario/login
+Content-Type: application/json
+
+{
+  "email": "ana@receitoteca.com",
+  "senha": "Ana@1234"
+}
+
+###
+
+@tokenUsuario = {{loginUsuario.response.body.token}}
+
+### ETIQUETAS
+
+### Listar todas as etiquetas
+GET {{server}}/api/etiquetas
+
+### RECEITAS
+
+### Listar todas as receitas (público)
+GET {{server}}/api/receitas
+
+###
+
+### Buscar uma receita pelo ID (público)
+GET {{server}}/api/receitas/1
+
+###
+
+### Criar receita (requer token de chef)
+POST {{server}}/api/receitas
+Content-Type: application/json
+Authorization: Bearer {{tokenChef}}
+
+{
+  "img": "images/nigiri_salmao.jpg",
+  "etiquetas": ["Salgada", "Sem Glúten"],
+  "title": "Nigiri de Salmão",
+  "time": "10 min",
+  "servings": 1,
+  "ingredients": [
+    "50 gramas de Arroz Japonês",
+    "80 gramas de Salmão Cru",
+    "Sal",
+    "Vinagre de Arroz",
+    "Açúcar"
+  ],
+  "steps": [
+    "Lave o arroz com água até ela sair transparente",
+    "Tempere o arroz com sal, açúcar e vinagre e deixe descansar 5 minutos",
+    "Corte o salmão na diagonal",
+    "Monte o nigiri moldando o arroz com as mãos e posicione o salmão no topo"
+  ]
+}
+
+###
+
+### Atualizar receita pelo ID (requer token do chef dono)
+PUT {{server}}/api/receitas/3
+Content-Type: application/json
+Authorization: Bearer {{tokenChef}}
+
+{
+  "img": "images/salada.png",
+  "etiquetas": ["Vegana", "Sem Glúten", "Poucas Calorias"],
+  "title": "Salada Tropical",
+  "time": "15 min",
+  "servings": 2,
+  "ingredients": [
+    "Alface",
+    "Tomate cereja",
+    "Pepino",
+    "Cebola",
+    "Manga",
+    "Maçã",
+    "Azeite e sal"
+  ],
+  "steps": [
+    "Lave os ingredientes",
+    "Corte tudo",
+    "Tempere e sirva"
+  ]
+}
+
+###
+
+### Deletar receita pelo ID (requer token do chef dono)
+DELETE {{server}}/api/receitas/1
+Authorization: Bearer {{tokenChef}}
+
+###
+
+### Listar receitas do chef logado
+GET {{server}}/api/chef/receitas
+Authorization: Bearer {{tokenChef}}
+
+### FAVORITOS
+
+### Listar favoritos do usuário logado
+GET {{server}}/api/favoritos
+Authorization: Bearer {{tokenUsuario}}
+
+###
+
+### Favoritar uma receita pelo ID
+POST {{server}}/api/favoritos/2
+Authorization: Bearer {{tokenUsuario}}
+
+###
+
+### Desfavoritar uma receita pelo ID
+DELETE {{server}}/api/favoritos/2
+Authorization: Bearer {{tokenUsuario}}
+
+### UPLOAD DE IMAGEM
+
+### Upload de imagem (requer token de chef)
+POST {{server}}/api/upload
+Authorization: Bearer {{tokenChef}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="img"; filename="foto.png"
+Content-Type: image/png
+
+< ./public/images/carbonara.png
+--boundary--
