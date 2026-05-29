@@ -7,6 +7,11 @@ async function create(data) {
   const { nome, email, senha } = data;
 
   if (nome && email && senha) {
+    const jaExiste = await db.get(
+      `SELECT id FROM chef WHERE email = ?`, [email]
+    );
+    if (jaExiste) throw new Error('E-mail já cadastrado');
+
     const hash = await bcrypt.hash(senha, 10);
     const sql = `INSERT INTO chef (nome, email, senha) VALUES (?, ?, ?)`;
     const { lastID } = await db.run(sql, [nome, email, hash]);
