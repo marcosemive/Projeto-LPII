@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "node --watch ./src/index.js",
-    "db:load": "node src/database/load.js",
-    "db:drop": "rm src/database/db.sqlite",
-    "db:reload": "npm run db:drop && npm run db:load"
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "db:reload": "npm run db:drop && npm run db:load",
+    "db:load": "tsx src/database/load.ts",
+    "db:drop": "rm src/database/db.sqlite"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -16,5 +17,16 @@
     "morgan": "^1.10.1",
     "multer": "^2.1.1",
     "sqlite-async": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.9.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
   }
 }

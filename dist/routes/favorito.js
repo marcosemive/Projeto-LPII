@@ -1,0 +1,39 @@
+import { Router } from 'express';
+import * as FavoritoController from '@/controllers/FavoritoController.js';
+import { autenticarUsuario } from '@/middlewares/auth.js';
+import { HttpError } from '@/errors/index.js';
+const router = Router();
+// Get user favoritos
+router.get('/', autenticarUsuario, async (req, res, next) => {
+    try {
+        const receitas = await FavoritoController.listarFavoritos(req.usuario.id);
+        res.json(receitas);
+    }
+    catch (error) {
+        next(new HttpError(error.message, 400));
+    }
+});
+// Add favorito
+router.post('/:receita_id', autenticarUsuario, async (req, res, next) => {
+    try {
+        const receita_id = Number(req.params.receita_id);
+        const favorito = await FavoritoController.adicionarFavorito(req.usuario.id, receita_id);
+        res.status(201).json(favorito);
+    }
+    catch (error) {
+        next(new HttpError(error.message, 400));
+    }
+});
+// Remove favorito
+router.delete('/:receita_id', autenticarUsuario, async (req, res, next) => {
+    try {
+        const receita_id = Number(req.params.receita_id);
+        await FavoritoController.removerFavorito(req.usuario.id, receita_id);
+        res.sendStatus(204);
+    }
+    catch (error) {
+        next(new HttpError(error.message, 400));
+    }
+});
+export default router;
+//# sourceMappingURL=favorito.js.map

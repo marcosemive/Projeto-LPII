@@ -1,0 +1,1 @@
+{"version":3,"file":"UploadController.js","sourceRoot":"","sources":["../../src/controllers/UploadController.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,KAAK,UAAU,WAAW,CAAC,IAAyB;IACzD,IAAI,CAAC,IAAI,EAAE,CAAC;QACV,MAAM,IAAI,KAAK,CAAC,wBAAwB,CAAC,CAAC;IAC5C,CAAC;IACD,OAAO,EAAE,GAAG,EAAE,UAAU,IAAI,CAAC,QAAQ,EAAE,EAAE,CAAC;AAC5C,CAAC"}
