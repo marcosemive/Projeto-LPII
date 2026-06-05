@@ -142,26 +142,80 @@
 }
 
 .tag {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+  position: relative;
   padding: 4px 12px;
   font-size: 12px;
   border-radius: 14px;
   color: #fff;
   font-weight: 600;
-}
-
-.tag.salgada {
   background: #e70731;
 }
 
+.tag.salgada {
+  background: #d4a017 !important;
+}
+
 .tag.doce {
-  background: #ff006e;
+  background: #ff8abf !important;
 }
 
 .tag.vegana {
-  background: #2a9d8f;
+  background: #2a9d8f !important;
+}
+
+.tag.low-carb {
+  background: #5a8f29 !important;
+}
+
+.tag.sem-gluten {
+  background: #8d6748 !important;
+}
+
+.tag.sem-lactose {
+  background: #6f8e8d !important;
+}
+
+.tag.vegetariana {
+  background: #4fa07a !important;
+}
+
+.tag.sem-acucar {
+  background: #f7d794 !important;
+  color: #3f3f3f !important;
+}
+
+.tag.sem-ovo {
+  background: #f0a500 !important;
+}
+
+.tag.sem-soja {
+  background: #3c6e71 !important;
+}
+
+.tag.integral {
+  background: #a97849 !important;
+}
+
+.tag.rica-em-proteina {
+  background: #1d4e89 !important;
+}
+
+.tag.poucas-calorias {
+  background: #97bf0d !important;
+}
+
+.tag.sem-conservantes {
+  background: #3b6a45 !important;
+}
+
+.tag.sem-gordura {
+  background: #f5f3d3 !important;
+  color: #222 !important;
+}
+
+.tag.light {
+  background: #f9f7e8 !important;
+  color: #222 !important;
 }
 
 .recipe-content {
@@ -170,6 +224,7 @@
 
 .recipe-content h3 {
   font-size: 16px;
+  font-weight: 700;
   margin-bottom: 8px;
 }
 

@@ -1,5 +1,5 @@
 import { initBusca, abrirReceita, fecharReceita, renderizarCards } from './modules/ui.js';
-import { abrirFormCriar, abrirFormEditar, salvarReceita, initFormEtiquetas } from './modules/chef.js';
+import { abrirFormCriar, salvarReceita, initFormEtiquetas } from './modules/chef.js';
 import { initNavegacao } from './modules/navegacao.js';
 import { fecharForm, initUploadFoto } from './modules/utils.js';
 import { getReceitas } from './api.js';

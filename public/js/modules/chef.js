@@ -30,6 +30,7 @@ export async function carregarReceitasDoChef() {
       `;
       item.querySelector('.btn-editar').onclick = (e) => { e.stopPropagation(); editarReceita(r.id); };
       item.querySelector('.btn-deletar').onclick = (e) => { e.stopPropagation(); deletarReceitaChef(r.id); };
+      item.onclick = () => editarReceita(r.id);
       lista.appendChild(item);
     });
   } catch (err) {
@@ -54,6 +55,7 @@ function limparForm() {
   document.getElementById('form-ingredients').value = '';
   document.getElementById('form-steps').value = '';
   document.getElementById('input-foto').value = '';
+  document.getElementById('form-chef-nome').innerText = localStorage.getItem('nome') || '';
 
   // Desmarca todas as etiquetas
   setEtiquetasSelecionadas([]);

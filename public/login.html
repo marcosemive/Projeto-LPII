@@ -9,6 +9,19 @@
   <link rel="stylesheet" href="css/components/cards.css">
   <link rel="stylesheet" href="css/components/forms.css">
   <link rel="stylesheet" href="css/components/profile.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#e70731',
+            'primary-dark': '#c9061f'
+          }
+        }
+      }
+    }
+  </script>
 </head>
 <body>
   <div class="bg-img" aria-hidden="true"></div>
@@ -47,7 +60,7 @@
         <p id="erroLogin" style="color:#e70731; font-size:14px; margin-bottom:8px;"></p>
 
         <div class="form-row">
-          <button type="submit" class="btn">Entrar &gt;</button>
+          <button type="submit" class="btn">Entrar</button>
         </div>
       </form>
 

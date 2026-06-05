@@ -8,6 +8,19 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/pages/home.css">
   <link rel="stylesheet" href="css/components/modals.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#e70731',
+            'primary-dark': '#c9061f'
+          }
+        }
+      }
+    }
+  </script>
 </head>
 
 <body>
@@ -178,7 +191,6 @@
 
     <div class="chef-actions">
       <button id="btnCriarReceita">➕ Criar nova receita</button>
-      <button id="btnEditarReceita">✏️ Editar minhas receitas</button>
     </div>
 
     <div id="chef-lista-receitas" class="chef-recipe-list"></div>

@@ -1,5 +1,14 @@
 import { getReceita, favoritarReceita, desfavoritarReceita, getFavoritos } from '../api.js';
 
+function normalizarTag(nome) {
+  return nome
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]/g, '');
+}
+
 export function renderizarCards(receitas, grid = null) {
   const container = grid || document.querySelector('#receitas .recipes-grid');
   if (!container) return;
@@ -11,6 +20,15 @@ export function renderizarCards(receitas, grid = null) {
     return;
   }
 
+  function normalizarTag(nome) {
+    return nome
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '');
+  }
+
   receitas.forEach(r => {
     const card = document.createElement('article');
     card.className = 'recipe-card';
@@ -19,10 +37,11 @@ export function renderizarCards(receitas, grid = null) {
     // Suporte a múltiplas etiquetas
     const etiquetas = r.etiquetas || [];
     const tagsHTML = etiquetas
-      .map(e => `<span class="tag ${e.nome.toLowerCase().replace(/\s+/g, '-')}">${e.nome}</span>`)
+      .map(e => `<span class="tag ${normalizarTag(e.nome)}">${e.nome}</span>`)
       .join('');
 
     const primeiroIngrediente = r.ingredients[0] || 'Receita deliciosa';
+    const chefName = r.chef_nome || r.chef?.nome || 'Receita de Chef';
 
     card.innerHTML = `
       <div class="recipe-image">
@@ -34,7 +53,7 @@ export function renderizarCards(receitas, grid = null) {
         <p class="description">${primeiroIngrediente}...</p>
         <div class="recipe-meta">
           <span class="comments">(0 comentários)</span>
-          <span class="chef">Chef: ${r.chef?.nome || ''}</span>
+          <span class="chef">Chef: ${chefName}</span>
         </div>
       </div>
     `;
@@ -68,14 +87,15 @@ export async function abrirReceita(id) {
   document.getElementById('modal-title').innerText = r.title;
   document.getElementById('modal-time').innerText = `⏱ ${r.time}`;
   document.getElementById('modal-servings').innerText = `👥 ${r.servings}`;
-  document.getElementById('modal-author').innerText = `👨‍🍳 ${r.chef?.nome || ''}`;
+  const modalChefName = r.chef_nome || r.chef?.nome || '';
+  document.getElementById('modal-author').innerText = `👨‍🍳 ${modalChefName}`;
 
   // Renderiza múltiplas etiquetas no modal
   const modalTagContainer = document.getElementById('modal-tags');
   if (modalTagContainer) {
     const etiquetas = r.etiquetas || [];
     modalTagContainer.innerHTML = etiquetas
-      .map(e => `<span class="tag ${e.nome.toLowerCase().replace(/\s+/g, '-')}">${e.nome}</span>`)
+      .map(e => `<span class="tag ${normalizarTag(e.nome)}">${e.nome}</span>`)
       .join('');
   }
 
@@ -132,12 +152,31 @@ document.addEventListener('DOMContentLoaded', () => {
           btnFav.innerText = '❤️';
           btnFav.dataset.favoritado = 'true';
         }
+
+        await atualizarFavoritosVisiveis();
       } catch (err) {
         alert(err.message);
       }
     });
   }
 });
+
+async function atualizarFavoritosVisiveis() {
+  const favoritosArea = document.getElementById('favoritos-area');
+  const favoritosGrid = document.getElementById('favoritos-grid');
+  if (!favoritosArea || favoritosArea.style.display === 'none' || !favoritosGrid) return;
+
+  try {
+    const receitas = await getFavoritos();
+    if (receitas.length === 0) {
+      favoritosGrid.innerHTML = '<p style="color:#888; padding: 16px;">Nenhuma receita favorita ainda.</p>';
+    } else {
+      renderizarCards(receitas, favoritosGrid);
+    }
+  } catch {
+    favoritosGrid.innerHTML = '<p style="color:#888; padding: 16px;">Nenhuma receita favorita ainda.</p>';
+  }
+}
 
 window.abrirReceita = abrirReceita;
 window.fecharReceita = fecharReceita;

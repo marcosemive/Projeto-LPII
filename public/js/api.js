@@ -107,7 +107,7 @@ export async function deletarReceita(id) {
 }
 
 export async function getReceitasDoChef() {
-  const res = await fetch(`${BASE_URL}/chef/receitas`, {
+  const res = await fetch(`${BASE_URL}/receitas/chef/minhas`, {
     headers: authHeaders()
   });
   const dados = await res.json();

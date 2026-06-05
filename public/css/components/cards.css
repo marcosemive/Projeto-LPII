@@ -19,6 +19,7 @@
 
 .card h1, .card2 h1 {
   font-size: 28px;
+  font-weight: 700;
   text-align: center;
   margin-bottom: 8px;
 }

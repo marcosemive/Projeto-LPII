@@ -32,6 +32,26 @@ export async function restaurarLayoutNormal() {
   }
 }
 
+export async function mostrarReceitasRecentes() {
+  const hero = document.getElementById('hero');
+  const receitasSection = document.getElementById('receitas');
+  const chefArea = document.getElementById('chef-area');
+  const favoritosSection = document.getElementById('favoritos-area');
+
+  if (hero) hero.style.display = 'none';
+  if (receitasSection) receitasSection.style.display = 'block';
+  if (chefArea) chefArea.style.display = 'none';
+  if (favoritosSection) favoritosSection.style.display = 'none';
+
+  mostrarSearch();
+
+  const grid = document.querySelector('#receitas .recipes-grid');
+  if (grid) {
+    const receitas = await getReceitas();
+    renderizarCards(receitas, grid);
+  }
+}
+
 export function mostrarChefArea() {
   const hero = document.getElementById('hero');
   const receitasPublicas = document.getElementById('receitas');
@@ -87,7 +107,7 @@ export function initNavegacao() {
 
   document.getElementById('link-receitas')?.addEventListener('click', (e) => {
     e.preventDefault();
-    restaurarLayoutNormal().then(() => {
+    mostrarReceitasRecentes().then(() => {
       document.getElementById('receitas')?.scrollIntoView({ behavior: 'smooth' });
     });
   });

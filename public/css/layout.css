@@ -37,6 +37,13 @@
   padding-bottom: 60px;
 }
 
+html,
+body {
+  height: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+}
+
 @media (max-width:720px) {
   .top-bar {
     height: 72px;
@@ -49,4 +56,20 @@
   .page-wrapper {
     padding-top: calc(72px + 20px);
   }
+}
+
+h1, h2, h3, .section-title, .chef-title, .chef-sub {
+  font-weight: 700;
+}
+
+p.lead {
+  font-weight: 600;
+}
+
+.section-header h2 {
+  font-weight: 800;
+}
+
+.hero-overlay h1 {
+  font-weight: 800;
 }
