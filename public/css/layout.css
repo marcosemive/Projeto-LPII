@@ -41,7 +41,6 @@ html,
 body {
   height: auto;
   overflow-x: hidden;
-  overscroll-behavior-y: contain;
 }
 
 @media (max-width:720px) {

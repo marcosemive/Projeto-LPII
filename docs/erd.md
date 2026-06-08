@@ -1,51 +1,51 @@
-# Diagrama ER - Receitoteca
-
+```mermaid
 erDiagram
 
-    CHEF {
-        INTEGER id PK
-        VARCHAR_100 nome
-        VARCHAR_100 email
-        VARCHAR_255 senha
+  "Chef" {
+    Int id "🗝️"
+    String nome 
+    String email 
+    String senha 
     }
+  
 
-    USUARIO {
-        INTEGER id PK
-        VARCHAR_100 nome
-        VARCHAR_100 email
-        VARCHAR_255 senha
+  "Usuario" {
+    Int id "🗝️"
+    String nome 
+    String email 
+    String senha 
     }
+  
 
-    ETIQUETA {
-        INTEGER id PK
-        VARCHAR_50 nome
+  "Etiqueta" {
+    Int id "🗝️"
+    String nome 
     }
+  
 
-    RECEITA {
-        INTEGER id PK
-        VARCHAR_255 img
-        VARCHAR_100 title
-        VARCHAR_50 time
-        INTEGER servings
-        INTEGER chef_id FK
-        TEXT ingredients
-        TEXT steps
+  "Receita" {
+    Int id "🗝️"
+    String img 
+    String title 
+    String time 
+    Int servings 
+    String ingredients 
+    String steps 
     }
+  
 
-    RECEITA_ETIQUETA {
-        INTEGER receita_id PK, FK
-        INTEGER etiqueta_id PK, FK
+  "ReceitaEtiqueta" {
+
     }
+  
 
-    FAVORITO {
-        INTEGER usuario_id PK, FK
-        INTEGER receita_id PK, FK
+  "Favorito" {
+
     }
-
-    CHEF ||--o{ RECEITA : cria
-
-    RECEITA ||--o{ RECEITA_ETIQUETA : categorizada
-    ETIQUETA ||--o{ RECEITA_ETIQUETA : categoriza
-
-    USUARIO ||--o{ FAVORITO : favorita
-    RECEITA ||--o{ FAVORITO : favoritada
+  
+    "Receita" }o--|| "Chef" : "chef"
+    "ReceitaEtiqueta" }o--|| "Receita" : "receita"
+    "ReceitaEtiqueta" }o--|| "Etiqueta" : "etiqueta"
+    "Favorito" }o--|| "Usuario" : "usuario"
+    "Favorito" }o--|| "Receita" : "receita"
+```

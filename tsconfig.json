@@ -1,21 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
     "module": "ESNext",
-    "lib": ["ES2020"],
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "allowJs": false,
+    "target": "ES2023",
     "strict": true,
     "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
+    "lib": ["ES2020"],
+    "resolveJsonModule": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
