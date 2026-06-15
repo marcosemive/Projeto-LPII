@@ -2,16 +2,29 @@
   "name": "receitoteca-api",
   "version": "1.0.0",
   "type": "module",
+  
   "scripts": {
     "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
+    "dev:all": "npm run db:setup && npm run dev",
     "build": "tsc",
-    "db:reload": "npm run db:drop && npm run db:load",
+
     "db:load": "tsx src/database/load.ts",
-    "db:drop": "rm src/database/db.sqlite"
+    "db:drop": "rm src/database/db.sqlite",
+    "db:reload": "npm run db:drop && npm run db:load",
+    "db:setup": "prisma generate && prisma db push",
+    "db:reset": "prisma migrate reset",
+
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/adapter-better-sqlite3": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
@@ -20,11 +33,13 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/multer": "^2.1.0",
-    "@types/node": "^25.9.1",
+    "@types/node": "^25.9.3",
+    "prisma": "^7.8.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"

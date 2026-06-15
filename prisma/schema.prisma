@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Chef {
+  id    Int    @id @default(autoincrement())
+  nome  String
+  email String @unique
+  senha String
+
+  receitas Receita[]
+}
+
+model Usuario {
+  id    Int    @id @default(autoincrement())
+  nome  String
+  email String @unique
+  senha String
+
+  favoritos Favorito[]
+}
+
+model Receita {
+  id         Int    @id @default(autoincrement())
+  img        String
+  title      String
+  time       Int
+  servings   Int
+  ingredients String
+  steps       String
+
+  chef_id Int
+  chef    Chef @relation(fields: [chef_id], references: [id])
+
+  etiquetas ReceitaEtiqueta[]
+  favoritos Favorito[]
+}
+
+model Etiqueta {
+  id   Int    @id @default(autoincrement())
+  nome String @unique
+
+  receitas ReceitaEtiqueta[]
+}
+
+model ReceitaEtiqueta {
+  receita_id  Int
+  etiqueta_id Int
+
+  receita  Receita  @relation(fields: [receita_id], references: [id], onDelete: Cascade)
+  etiqueta Etiqueta @relation(fields: [etiqueta_id], references: [id], onDelete: Cascade)
+
+  @@id([receita_id, etiqueta_id])
+}
+
+model Favorito {
+  usuario_id Int
+  receita_id Int
+
+  usuario Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  receita Receita @relation(fields: [receita_id], references: [id], onDelete: Cascade)
+
+  @@id([usuario_id, receita_id])
+}

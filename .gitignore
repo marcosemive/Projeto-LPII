@@ -1,3 +1,10 @@
-node_modules
-dist
+node_modules/
+dist/
 src/database/db.sqlite
+
+generated/
+
+.env
+
+
+*.db
