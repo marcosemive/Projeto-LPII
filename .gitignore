@@ -1,10 +1,11 @@
 node_modules/
 dist/
-src/database/db.sqlite
-
 generated/
 
+
+src/database/db.sqlite
 .env
-
-
 *.db
+*.db-journal
+*.db-wal
+*.db-shm

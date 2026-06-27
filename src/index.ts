@@ -6,7 +6,7 @@ import { errorHandler } from '@/middlewares/errorHandler.js';
  
 const server = express();
  
-server.use(morgan('tiny'));
+server.use(morgan('dev'));
  
 server.use(express.json());
 

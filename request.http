@@ -82,7 +82,7 @@ Authorization: Bearer {{tokenChef}}
   "img": "images/nigiri_salmao.jpg",
   "etiquetas": ["Salgada", "Sem Glúten"],
   "title": "Nigiri de Salmão",
-  "time": "10 min",
+  "time": 10,
   "servings": 1,
   "ingredients": [
     "50 gramas de Arroz Japonês",
@@ -110,7 +110,7 @@ Authorization: Bearer {{tokenChef}}
   "img": "images/salada.png",
   "etiquetas": ["Vegana", "Sem Glúten", "Poucas Calorias"],
   "title": "Salada Tropical",
-  "time": "15 min",
+  "time": 15,
   "servings": 2,
   "ingredients": [
     "Alface",
@@ -171,3 +171,120 @@ Content-Type: image/png
 
 < ./public/images/carbonara.png
 --boundary--
+
+### CASOS INVÁLIDOS
+
+### Cadastro de Chef com e-mail já existente
+POST {{server}}/api/auth/chef/cadastro
+Content-Type: application/json
+
+{
+  "nome": "Paulo Duplicado",
+  "email": "paulo@receitoteca.com",
+  "senha": "Paulo@123"
+}
+
+###
+
+### Login de Chef com senha incorreta
+POST {{server}}/api/auth/chef/login
+Content-Type: application/json
+
+{
+  "email": "paulo@receitoteca.com",
+  "senha": "SenhaErrada123"
+}
+
+###
+
+### Login de Usuário com e-mail inexistente
+POST {{server}}/api/auth/usuario/login
+Content-Type: application/json
+
+{
+  "email": "naoexiste@receitoteca.com",
+  "senha": "Qualquer123"
+}
+
+###
+
+### Criar receita sem token (não autenticado)
+POST {{server}}/api/receitas
+Content-Type: application/json
+
+{
+  "img": "images/teste.jpg",
+  "etiquetas": ["Salgada"],
+  "title": "Receita sem token",
+  "time": 10,
+  "servings": 1,
+  "ingredients": ["Item 1"],
+  "steps": ["Passo 1"]
+}
+
+###
+
+### Criar receita com campo obrigatório faltando (sem title)
+POST {{server}}/api/receitas
+Content-Type: application/json
+Authorization: Bearer {{tokenChef}}
+
+{
+  "img": "images/teste.jpg",
+  "etiquetas": ["Salgada"],
+  "time": 10,
+  "servings": 1,
+  "ingredients": ["Item 1"],
+  "steps": ["Passo 1"]
+}
+
+###
+
+### Criar receita com etiqueta inexistente
+POST {{server}}/api/receitas
+Content-Type: application/json
+Authorization: Bearer {{tokenChef}}
+
+{
+  "img": "images/teste.jpg",
+  "etiquetas": ["Etiqueta Que Não Existe"],
+  "title": "Receita com etiqueta inválida",
+  "time": 10,
+  "servings": 1,
+  "ingredients": ["Item 1"],
+  "steps": ["Passo 1"]
+}
+
+###
+
+### Buscar receita com ID inexistente
+GET {{server}}/api/receitas/9999
+
+###
+
+### Atualizar receita de outro chef (sem permissão)
+PUT {{server}}/api/receitas/2
+Content-Type: application/json
+Authorization: Bearer {{tokenChef}}
+
+{
+  "img": "images/teste.jpg",
+  "etiquetas": ["Doce"],
+  "title": "Tentativa de editar receita de outro chef",
+  "time": 20,
+  "servings": 2,
+  "ingredients": ["Item 1"],
+  "steps": ["Passo 1"]
+}
+
+###
+
+### Deletar receita inexistente
+DELETE {{server}}/api/receitas/9999
+Authorization: Bearer {{tokenChef}}
+
+###
+
+### Favoritar receita já favoritada (duplicado)
+POST {{server}}/api/favoritos/2
+Authorization: Bearer {{tokenUsuario}}

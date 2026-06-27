@@ -41,7 +41,6 @@ html,
 body {
   height: auto;
   overflow-x: hidden;
-  overscroll-behavior-y: contain;
 }
 
 @media (max-width:720px) {
@@ -72,4 +71,15 @@ p.lead {
 
 .hero-overlay h1 {
   font-weight: 800;
+}
+
+.page-wrapper--fit {
+  padding-top: calc(88px + 32px);
+  padding-bottom: 12px;
+}
+
+@media (max-width: 720px) {
+  .page-wrapper--fit {
+    min-height: calc(100vh - 72px - 20px);
+  }
 }

@@ -6,13 +6,10 @@
  "scripts": {
   "start": "tsx src/index.ts",
   "dev": "tsx watch src/index.ts",
-  "dev:all": "npm run db:fresh && npm run dev",
+  "dev:all": "npm install && cp -n .env.example .env && npm run prisma:generate && npm run db:fresh && npm run dev",
 
-  "db:fresh": "npm run db:drop && npm run db:migrate && npm run db:seed",
-  "db:drop": "rm -f prisma/dev.db",
-  "db:migrate": "prisma migrate dev --name init",
+  "db:refresh": "prisma migrate reset --force && npm run db:seed",
   "db:seed": "tsx src/database/load.ts",
-
   "build": "tsc",
   "prisma:generate": "prisma generate",
   "prisma:studio": "prisma studio"
