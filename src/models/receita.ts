@@ -40,27 +40,28 @@ async function create(data: ReceitaCreateInput): Promise<Receita> {
 
   const tagsInput = etiquetas || etiqueta;
 
-  if (img && tagsInput && title && time && servings && ingredients && steps) {
+  let resolvedChefId = chef_id;
+  if (!resolvedChefId && chef_email) {
+    const chef = await Chef.readByEmail(chef_email);
+    if (chef) resolvedChefId = chef.id;
+  }
+
+  if (img && tagsInput && title && time && servings && ingredients && steps && resolvedChefId) {
     if (title.trim() === 'Nome da Receita') {
       throw new Error('Por favor, altere o nome da receita');
-    }
-
-    let resolvedChefId = chef_id;
-    if (!resolvedChefId && chef_email) {
-      const chef = await Chef.readByEmail(chef_email);
-      if (!chef) throw new Error('Chef não encontrado');
-      resolvedChefId = chef.id;
     }
 
     const nova = await prisma.receita.create({
       data: {
         img,
         title,
-        time: Number(time),
-        servings: Number(servings),
-        chef_id: resolvedChefId!,
+        time: Math.floor(Number(time)),
+        servings: Math.floor(Number(servings)),
         ingredients: JSON.stringify(ingredients),
         steps: JSON.stringify(steps),
+        chef: {
+          connect: { id: Number(resolvedChefId) }
+        }
       },
     });
 
@@ -124,8 +125,8 @@ async function update(data: ReceitaUpdateInput): Promise<Receita> {
       data: {
         img,
         title,
-        time: Number(time),
-        servings: Number(servings),
+        time: Math.floor(Number(time)),
+        servings: Math.floor(Number(servings)),
         ingredients: JSON.stringify(ingredients),
         steps: JSON.stringify(steps),
       },
