@@ -3,23 +3,20 @@
   "version": "1.0.0",
   "type": "module",
   
-  "scripts": {
-    "start": "tsx src/index.ts",
-    "dev": "tsx watch src/index.ts",
-    "dev:all": "npm run db:load && npm run db:setup && npm run dev",
-    "build": "tsc",
+ "scripts": {
+  "start": "tsx src/index.ts",
+  "dev": "tsx watch src/index.ts",
+  "dev:all": "npm run db:fresh && npm run dev",
 
-    "db:load": "tsx src/database/load.ts",
-    "db:drop": "rm src/database/db.sqlite",
-    "db:reload": "npm run db:drop && npm run db:load",
-    "db:setup": "prisma generate && prisma db push",
-    "db:reset": "prisma migrate reset",
+  "db:fresh": "npm run db:drop && npm run db:migrate && npm run db:seed",
+  "db:drop": "rm -f prisma/dev.db",
+  "db:migrate": "prisma migrate dev --name init",
+  "db:seed": "tsx src/database/load.ts",
 
-    "prisma:generate": "prisma generate",
-    "prisma:push": "prisma db push",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
-  },
+  "build": "tsc",
+  "prisma:generate": "prisma generate",
+  "prisma:studio": "prisma studio"
+},
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.8.0",
     "@prisma/client": "^7.8.0",

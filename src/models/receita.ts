@@ -56,7 +56,7 @@ async function create(data: ReceitaCreateInput): Promise<Receita> {
       data: {
         img,
         title,
-        time: String(time),
+        time: Number(time),
         servings: Number(servings),
         chef_id: resolvedChefId!,
         ingredients: JSON.stringify(ingredients),
@@ -124,7 +124,7 @@ async function update(data: ReceitaUpdateInput): Promise<Receita> {
       data: {
         img,
         title,
-        time: String(time),
+        time: Number(time),
         servings: Number(servings),
         ingredients: JSON.stringify(ingredients),
         steps: JSON.stringify(steps),

@@ -25,7 +25,7 @@ erDiagram
         INTEGER id PK
         VARCHAR_255 img
         VARCHAR_100 title
-        VARCHAR_50 time
+        INTEGER time
         INTEGER servings
         INTEGER chef_id FK
         TEXT ingredients

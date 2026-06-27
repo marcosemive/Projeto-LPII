@@ -43,7 +43,7 @@
       "img": "images/carbonara.png",
       "etiqueta": "Salgada",
       "title": "Pasta carbonara tradicional",
-      "time": "30 min",
+      "time": 30,
       "servings": 4,
       "chef_email": "paulo@receitoteca.com",
       "ingredients": [
@@ -63,7 +63,7 @@
       "img": "images/brigadeiro.png",
       "etiqueta": "Doce",
       "title": "Bolo de brigadeiro belga",
-      "time": "60 min",
+      "time": 60,
       "servings": 8,
       "chef_email": "sandra@receitoteca.com",
       "ingredients": [
@@ -83,7 +83,7 @@
       "img": "images/salada.png",
       "etiqueta": "Vegana",
       "title": "Salada simples",
-      "time": "15 min",
+      "time": 15,
       "servings": 2,
       "chef_email": "gabriela@receitoteca.com",
       "ingredients": [
@@ -102,7 +102,7 @@
       "img": "images/panqueca.png",
       "etiqueta": "Doce",
       "title": "Panquecas americanas",
-      "time": "25 min",
+      "time": 25,
       "servings": 4,
       "chef_email": "leonardo@receitoteca.com",
       "ingredients": [
