@@ -1,34 +1,41 @@
-import Database from '@/database/database.js';
+import { prisma } from '@/database/prisma.js';
 import Etiqueta from '@/models/etiqueta.js';
 import Chef from '@/models/chef.js';
 import type { Receita, ReceitaCreateInput, ReceitaUpdateInput } from '@/types/Receita.d.ts';
-import type { Etiqueta as EtiquetaType } from '@/types/Etiqueta.d.ts';
 
-interface PromiseDatabase {
-  run(sql: string, params?: any[]): Promise<{ changes: number; lastID: number }>;
-  get(sql: string, params?: any[]): Promise<any>;
-  all(sql: string, params?: any[]): Promise<any[]>;
-  close(): Promise<void>;
-}
-
-async function vincularEtiquetas(db: PromiseDatabase, receitaId: number, etiquetas: string | string[]): Promise<void> {
+async function vincularEtiquetas(receitaId: number, etiquetas: string | string[]): Promise<void> {
   const lista = Array.isArray(etiquetas) ? etiquetas : [etiquetas];
 
-  await db.run(`DELETE FROM receita_etiqueta WHERE receita_id = ?`, [receitaId]);
+  await prisma.receitaEtiqueta.deleteMany({ where: { receita_id: receitaId } });
 
+  const etiquetaIds: number[] = [];
   for (const nome of lista) {
     const etiquetaObj = await Etiqueta.readByNome(nome);
     if (!etiquetaObj) throw new Error(`Etiqueta "${nome}" não encontrada`);
-    await db.run(
-      `INSERT INTO receita_etiqueta (receita_id, etiqueta_id) VALUES (?, ?)`,
-      [receitaId, etiquetaObj.id]
-    );
+    etiquetaIds.push(etiquetaObj.id);
   }
+
+  await prisma.receitaEtiqueta.createMany({
+    data: etiquetaIds.map((etiqueta_id) => ({ receita_id: receitaId, etiqueta_id })),
+  });
+}
+
+function montarReceita(row: any): Receita {
+  return {
+    id: row.id,
+    img: row.img,
+    title: row.title,
+    time: row.time,
+    servings: row.servings,
+    chef_id: row.chef.id,
+    chef_nome: row.chef.nome,
+    etiquetas: row.etiquetas.map((re: any) => re.etiqueta),
+    ingredients: JSON.parse(row.ingredients),
+    steps: JSON.parse(row.steps),
+  };
 }
 
 async function create(data: ReceitaCreateInput): Promise<Receita> {
-  const db = await Database.connect();
-
   const { img, etiqueta, etiquetas, title, time, servings, chef_email, chef_id, ingredients, steps } = data;
 
   const tagsInput = etiquetas || etiqueta;
@@ -45,132 +52,100 @@ async function create(data: ReceitaCreateInput): Promise<Receita> {
       resolvedChefId = chef.id;
     }
 
-    const sql = `
-      INSERT INTO receita (img, title, time, servings, chef_id, ingredients, steps)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
+    const nova = await prisma.receita.create({
+      data: {
+        img,
+        title,
+        time: String(time),
+        servings: Number(servings),
+        chef_id: resolvedChefId!,
+        ingredients: JSON.stringify(ingredients),
+        steps: JSON.stringify(steps),
+      },
+    });
 
-    const { lastID } = await db.run(sql, [
-      img, title, time, Number(servings), resolvedChefId,
-      JSON.stringify(ingredients), JSON.stringify(steps),
-    ]);
+    await vincularEtiquetas(nova.id, tagsInput);
 
-    await vincularEtiquetas(db, lastID, tagsInput);
-
-    return await readById(lastID);
+    return await readById(nova.id);
   } else {
     throw new Error('Todos os campos são obrigatórios');
   }
 }
 
 async function read(): Promise<Receita[]> {
-  const db = await Database.connect();
+  const rows = await prisma.receita.findMany({
+    include: {
+      chef: true,
+      etiquetas: { include: { etiqueta: true } },
+    },
+  });
 
-  const rows = await db.all(`
-    SELECT
-      r.id, r.img, r.title, r.time, r.servings,
-      r.ingredients, r.steps,
-      c.id AS chef_id, c.nome AS chef_nome
-    FROM receita r
-    JOIN chef c ON c.id = r.chef_id
-  `);
-
-  const receitas: Receita[] = [];
-  for (const row of rows) {
-    receitas.push(await readById(row.id));
-  }
-  return receitas;
+  return rows.map(montarReceita);
 }
 
 async function readById(id: number): Promise<Receita> {
-  const db = await Database.connect();
+  const row = await prisma.receita.findUnique({
+    where: { id },
+    include: {
+      chef: true,
+      etiquetas: { include: { etiqueta: true } },
+    },
+  });
 
-  const receita = await db.get(`
-    SELECT r.id, r.img, r.title, r.time, r.servings,
-           r.ingredients, r.steps,
-           c.id AS chef_id, c.nome AS chef_nome
-    FROM receita r
-    JOIN chef c ON c.id = r.chef_id
-    WHERE r.id = ?
-  `, [id]);
+  if (!row) throw new Error('Receita não encontrada');
 
-  if (!receita) throw new Error('Receita não encontrada');
-
-  const etiquetasRows = await db.all(`
-    SELECT e.id, e.nome
-    FROM etiqueta e
-    JOIN receita_etiqueta re ON re.etiqueta_id = e.id
-    WHERE re.receita_id = ?
-  `, [id]) as EtiquetaType[];
-
-  return {
-    id: receita.id,
-    img: receita.img,
-    title: receita.title,
-    time: receita.time,
-    servings: receita.servings,
-    chef_id: receita.chef_id,
-    chef_nome: receita.chef_nome,
-    etiquetas: etiquetasRows,
-    ingredients: JSON.parse(receita.ingredients),
-    steps: JSON.parse(receita.steps),
-  };
+  return montarReceita(row);
 }
 
 async function readByChef(chef_id: number): Promise<Receita[]> {
-  const db = await Database.connect();
+  const rows = await prisma.receita.findMany({
+    where: { chef_id },
+    include: {
+      chef: true,
+      etiquetas: { include: { etiqueta: true } },
+    },
+  });
 
-  const rows = await db.all(`
-    SELECT id FROM receita WHERE chef_id = ?
-  `, [chef_id]);
-
-  const receitas: Receita[] = [];
-  for (const row of rows) {
-    receitas.push(await readById(row.id));
-  }
-  return receitas;
+  return rows.map(montarReceita);
 }
 
 async function update(data: ReceitaUpdateInput): Promise<Receita> {
-  const db = await Database.connect();
-
   const { id, img, etiqueta, etiquetas, title, time, servings, ingredients, steps, chef_id } = data;
 
   const tagsInput = etiquetas || etiqueta;
 
   if (id && img && tagsInput && title && time && servings && ingredients && steps) {
-    const atual = await db.get(`SELECT chef_id FROM receita WHERE id = ?`, [id]);
+    const atual = await prisma.receita.findUnique({ where: { id } });
     if (!atual) throw new Error('Receita não encontrada');
     if (chef_id && atual.chef_id !== chef_id) throw new Error('Sem permissão para editar esta receita');
 
-    const { changes } = await db.run(`
-      UPDATE receita
-      SET img = ?, title = ?, time = ?, servings = ?, ingredients = ?, steps = ?
-      WHERE id = ?
-    `, [img, title, time, Number(servings), JSON.stringify(ingredients), JSON.stringify(steps), id]);
+    await prisma.receita.update({
+      where: { id },
+      data: {
+        img,
+        title,
+        time: String(time),
+        servings: Number(servings),
+        ingredients: JSON.stringify(ingredients),
+        steps: JSON.stringify(steps),
+      },
+    });
 
-    if (changes === 1) {
-      await vincularEtiquetas(db, id, tagsInput);
-      return await readById(id);
-    } else {
-      throw new Error('Receita não encontrada');
-    }
+    await vincularEtiquetas(id, tagsInput);
+
+    return await readById(id);
   } else {
     throw new Error('Todos os campos são obrigatórios');
   }
 }
 
 async function remove(id: number, chef_id?: number): Promise<boolean> {
-  const db = await Database.connect();
-
-  const atual = await db.get(`SELECT chef_id FROM receita WHERE id = ?`, [id]);
+  const atual = await prisma.receita.findUnique({ where: { id } });
   if (!atual) throw new Error('Receita não encontrada');
   if (chef_id && atual.chef_id !== chef_id) throw new Error('Sem permissão para deletar esta receita');
 
-  const { changes } = await db.run(`DELETE FROM receita WHERE id = ?`, [id]);
-
-  if (changes === 1) return true;
-  else throw new Error('Receita não encontrada');
+  await prisma.receita.delete({ where: { id } });
+  return true;
 }
 
 export default { create, read, readById, readByChef, update, remove };

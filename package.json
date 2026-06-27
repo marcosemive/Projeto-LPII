@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
-    "dev:all": "npm run db:setup && npm run dev",
+    "dev:all": "npm run db:load && npm run db:setup && npm run dev",
     "build": "tsc",
 
     "db:load": "tsx src/database/load.ts",
