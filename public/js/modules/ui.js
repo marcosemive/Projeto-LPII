@@ -20,28 +20,18 @@ export function renderizarCards(receitas, grid = null) {
     return;
   }
 
-  function normalizarTag(nome) {
-    return nome
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]/g, '');
-  }
-
   receitas.forEach(r => {
     const card = document.createElement('article');
     card.className = 'recipe-card';
     card.setAttribute('onclick', `abrirReceita(${r.id})`);
 
-    // Suporte a múltiplas etiquetas
     const etiquetas = r.etiquetas || [];
     const tagsHTML = etiquetas
       .map(e => `<span class="tag ${normalizarTag(e.nome)}">${e.nome}</span>`)
       .join('');
 
     const primeiroIngrediente = r.ingredients[0] || 'Receita deliciosa';
-    const chefName = r.chef_nome || r.chef?.nome || 'Receita de Chef';
+    const chefName = r.usuario_nome || 'Chef';
 
     card.innerHTML = `
       <div class="recipe-image">
@@ -85,12 +75,10 @@ export async function abrirReceita(id) {
 
   document.getElementById('modal-img').src = r.img;
   document.getElementById('modal-title').innerText = r.title;
-  document.getElementById('modal-time').innerText = `⏱ ${r.time}`;
-  document.getElementById('modal-servings').innerText = `👥 ${r.servings}`;
-  const modalChefName = r.chef_nome || r.chef?.nome || '';
-  document.getElementById('modal-author').innerText = `👨‍🍳 ${modalChefName}`;
+  document.getElementById('modal-time').innerText = `⏱ ${r.time} min`;
+  document.getElementById('modal-servings').innerText = `👥 ${r.servings} porções`;
+  document.getElementById('modal-author').innerText = `👨‍🍳 ${r.usuario_nome || ''}`;
 
-  // Renderiza múltiplas etiquetas no modal
   const modalTagContainer = document.getElementById('modal-tags');
   if (modalTagContainer) {
     const etiquetas = r.etiquetas || [];
