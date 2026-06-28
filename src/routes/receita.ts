@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import * as ReceitaController from '@/controllers/ReceitaController.js';
-import { autenticarChef } from '@/middlewares/auth.js';
+import { autenticar } from '@/middlewares/auth.js';
 import { HttpError } from '@/errors/index.js';
 
 const router = Router();
@@ -27,9 +27,9 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Get receitas from logged chef
-router.get('/chef/minhas', autenticarChef, async (req: Request, res: Response, next: NextFunction) => {
+router.get('/chef/minhas', autenticar('CHEF'), async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const receitas = await ReceitaController.obterReceitasChef(req.chef!.id);
+    const receitas = await ReceitaController.obterReceitasUsuario(req.usuario!.id)
     res.json(receitas);
   } catch (error) {
     next(new HttpError((error as Error).message, 400));
@@ -37,9 +37,9 @@ router.get('/chef/minhas', autenticarChef, async (req: Request, res: Response, n
 });
 
 // Create receita
-router.post('/', autenticarChef, async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', autenticar('CHEF'), async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const createdReceita = await ReceitaController.criarReceita({ ...req.body, chef_id: req.chef!.id });
+    const createdReceita = await ReceitaController.criarReceita({ ...req.body, usuario_id: req.usuario!.id });
     res.status(201).json(createdReceita);
   } catch (error) {
     next(new HttpError((error as Error).message, 400));
@@ -47,10 +47,10 @@ router.post('/', autenticarChef, async (req: Request, res: Response, next: NextF
 });
 
 // Update receita
-router.put('/:id', autenticarChef, async (req: Request, res: Response, next: NextFunction) => {
+router.put('/:id', autenticar('CHEF'), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id);
-    const updatedReceita = await ReceitaController.atualizarReceita({ ...req.body, id, chef_id: req.chef!.id });
+    const updatedReceita = await ReceitaController.atualizarReceita({ ...req.body, id, usuario_id: req.usuario!.id });
     res.json(updatedReceita);
   } catch (error) {
     next(new HttpError((error as Error).message, 400));
@@ -58,10 +58,10 @@ router.put('/:id', autenticarChef, async (req: Request, res: Response, next: Nex
 });
 
 // Delete receita
-router.delete('/:id', autenticarChef, async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:id', autenticar('CHEF'), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id);
-    await ReceitaController.deletarReceita(id, req.chef!.id);
+    await ReceitaController.deletarReceita(id, req.usuario!.id);
     res.sendStatus(204);
   } catch (error) {
     next(new HttpError((error as Error).message, 400));

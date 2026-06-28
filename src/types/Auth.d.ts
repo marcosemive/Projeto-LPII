@@ -1,16 +1,18 @@
-import type { Chef } from '@/types/Chef.d.ts';
 import type { Usuario } from '@/types/Usuario.d.ts';
+
+export type UsuarioRole = 'CHEF' | 'ENTUSIASTA';
 
 export interface AuthPayload {
   id: number;
   nome: string;
-  tipo: 'chef' | 'usuario';
+  role: UsuarioRole;
+  tipo?: 'chef' | 'usuario';
   iat?: number;
   exp?: number;
 }
 
 export interface LoginResponse {
-  chef?: Chef;
+  chef?: Usuario;
   usuario?: Usuario;
   token: string;
 }

@@ -2,18 +2,12 @@
 
 erDiagram
 
-    CHEF {
-        INTEGER id PK
-        VARCHAR_100 nome
-        VARCHAR_100 email
-        VARCHAR_255 senha
-    }
-
     USUARIO {
         INTEGER id PK
         VARCHAR_100 nome
         VARCHAR_100 email
         VARCHAR_255 senha
+        VARCHAR_20 role
     }
 
     ETIQUETA {
@@ -27,7 +21,7 @@ erDiagram
         VARCHAR_100 title
         INTEGER time
         INTEGER servings
-        INTEGER chef_id FK
+        INTEGER usuario_id FK
         TEXT ingredients
         TEXT steps
     }
@@ -42,10 +36,9 @@ erDiagram
         INTEGER receita_id PK, FK
     }
 
-    CHEF ||--o{ RECEITA : cria
+    USUARIO ||--o{ RECEITA : cria
+    USUARIO ||--o{ FAVORITO : favorita
 
     RECEITA ||--o{ RECEITA_ETIQUETA : categorizada
     ETIQUETA ||--o{ RECEITA_ETIQUETA : categoriza
-
-    USUARIO ||--o{ FAVORITO : favorita
     RECEITA ||--o{ FAVORITO : favoritada

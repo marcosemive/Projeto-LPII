@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
 import Receita from '@/models/receita.js';
-import Chef from '@/models/chef.js';
+import Usuario from '@/models/usuario.js';
 import Etiqueta from '@/models/etiqueta.js';
 
 async function up(): Promise<void> {
@@ -13,9 +13,11 @@ async function up(): Promise<void> {
   }
 
   for (const chef of seed.chefs) {
-    await Chef.create(chef);
+    await Usuario.create({ ...chef, role: 'CHEF' });
   }
-
+for (const usuario of seed.usuarios) {
+  await Usuario.create({ ...usuario, role: 'ENTUSIASTA' });
+}
   for (const receita of seed.receitas) {
     await Receita.create(receita);
   }

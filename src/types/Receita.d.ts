@@ -1,4 +1,3 @@
-import type { Chef } from '@/types/Chef.d.ts';
 import type { Etiqueta } from '@/types/Etiqueta.d.ts';
 
 export interface Receita {
@@ -9,8 +8,8 @@ export interface Receita {
   servings: number | string;
   ingredients: string | string[];
   steps: string | string[];
-  chef_id: number;
-  chef_nome: string;
+  usuario_id: number;
+  usuario_nome: string;
   etiquetas: Etiqueta[];
 }
 
@@ -21,13 +20,13 @@ export interface ReceitaCreateInput {
   title: string;
   time: number | string;
   servings: number | string;
-  chef_email?: string;
-  chef_id?: number;
+  usuario_email?: string;
+  usuario_id?: number;
   ingredients: string | string[];
   steps: string | string[];
 }
 
 export interface ReceitaUpdateInput extends ReceitaCreateInput {
   id: number;
-  chef_id: number;
+  usuario_id?: number;
 }

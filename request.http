@@ -61,6 +61,8 @@ Content-Type: application/json
 ### Listar todas as etiquetas
 GET {{server}}/api/etiquetas
 
+###
+
 ### RECEITAS
 
 ### Listar todas as receitas (público)
@@ -140,6 +142,8 @@ Authorization: Bearer {{tokenChef}}
 GET {{server}}/api/chef/receitas
 Authorization: Bearer {{tokenChef}}
 
+###
+
 ### FAVORITOS
 
 ### Listar favoritos do usuário logado
@@ -158,6 +162,8 @@ Authorization: Bearer {{tokenUsuario}}
 DELETE {{server}}/api/favoritos/2
 Authorization: Bearer {{tokenUsuario}}
 
+###
+
 ### UPLOAD DE IMAGEM
 
 ### Upload de imagem (requer token de chef)
@@ -171,6 +177,8 @@ Content-Type: image/png
 
 < ./public/images/carbonara.png
 --boundary--
+
+###
 
 ### CASOS INVÁLIDOS
 

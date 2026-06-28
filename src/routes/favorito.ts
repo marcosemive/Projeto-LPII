@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import * as FavoritoController from '@/controllers/FavoritoController.js';
-import { autenticarUsuario } from '@/middlewares/auth.js';
+import { autenticar } from '@/middlewares/auth.js';
 import { HttpError } from '@/errors/index.js';
 
 const router = Router();
 
 // Get user favoritos
-router.get('/', autenticarUsuario, async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', autenticar('ENTUSIASTA'), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const receitas = await FavoritoController.listarFavoritos(req.usuario!.id);
     res.json(receitas);
@@ -16,7 +16,7 @@ router.get('/', autenticarUsuario, async (req: Request, res: Response, next: Nex
 });
 
 // Add favorito
-router.post('/:receita_id', autenticarUsuario, async (req: Request, res: Response, next: NextFunction) => {
+router.post('/:receita_id', autenticar('ENTUSIASTA'), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const receita_id = Number(req.params.receita_id);
     const favorito = await FavoritoController.adicionarFavorito(req.usuario!.id, receita_id);
@@ -27,7 +27,7 @@ router.post('/:receita_id', autenticarUsuario, async (req: Request, res: Respons
 });
 
 // Remove favorito
-router.delete('/:receita_id', autenticarUsuario, async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:receita_id', autenticar('ENTUSIASTA'), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const receita_id = Number(req.params.receita_id);
     await FavoritoController.removerFavorito(req.usuario!.id, receita_id);

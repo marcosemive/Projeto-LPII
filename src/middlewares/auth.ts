@@ -1,8 +1,16 @@
 import jwt from 'jsonwebtoken';
 import type { Request, Response, NextFunction } from 'express';
-import type { AuthPayload } from '@/types/Auth.d.ts';
+import type { AuthPayload, UsuarioRole } from '@/types/Auth.d.ts';
 
-const SECRET = 'receitoteca_secret_2026';
+const SECRET = process.env.JWT_SECRET as string;
+if (!SECRET) throw new Error('JWT_SECRET não definido no .env');
+
+function normalizarRole(role?: string, tipo?: 'chef' | 'usuario'): UsuarioRole {
+  if (role === 'CHEF' || role === 'ENTUSIASTA') return role;
+  if (tipo === 'chef') return 'CHEF';
+  if (tipo === 'usuario') return 'ENTUSIASTA';
+  return 'ENTUSIASTA';
+}
 
 export function gerarToken(payload: Omit<AuthPayload, 'iat' | 'exp'>): string {
   return jwt.sign(payload, SECRET, { expiresIn: '8h' });
@@ -11,48 +19,34 @@ export function gerarToken(payload: Omit<AuthPayload, 'iat' | 'exp'>): string {
 declare global {
   namespace Express {
     interface Request {
-      chef?: AuthPayload;
       usuario?: AuthPayload;
     }
   }
 }
 
-export function autenticarChef(req: Request, res: Response, next: NextFunction): Response | void {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+export function autenticar(requiredRoles: UsuarioRole | UsuarioRole[]) {
+  return (req: Request, res: Response, next: NextFunction): Response | void => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) {
-    return res.status(401).json({ message: 'Token não fornecido' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, SECRET) as AuthPayload;
-    if (decoded.tipo !== 'chef') {
-      return res.status(403).json({ message: 'Acesso restrito a chefs' });
+    if (!token) {
+      return res.status(401).json({ message: 'Token não fornecido' });
     }
-    req.chef = decoded;
-    next();
-  } catch {
-    return res.status(401).json({ message: 'Token inválido ou expirado' });
-  }
-}
 
-export function autenticarUsuario(req: Request, res: Response, next: NextFunction): Response | void {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+    try {
+      const decoded = jwt.verify(token, SECRET) as AuthPayload;
+      const role = normalizarRole(decoded.role, decoded.tipo);
+      const roles = Array.isArray(requiredRoles) ? requiredRoles : [requiredRoles];
 
-  if (!token) {
-    return res.status(401).json({ message: 'Token não fornecido' });
-  }
+      if (!roles.includes(role)) {
+        const label = role === 'CHEF' ? 'chefs' : 'usuários';
+        return res.status(403).json({ message: `Acesso restrito a ${label}` });
+      }
 
-  try {
-    const decoded = jwt.verify(token, SECRET) as AuthPayload;
-    if (decoded.tipo !== 'usuario') {
-      return res.status(403).json({ message: 'Acesso restrito a usuários' });
+      req.usuario = { ...decoded, role };
+      next();
+    } catch {
+      return res.status(401).json({ message: 'Token inválido ou expirado' });
     }
-    req.usuario = decoded;
-    next();
-  } catch {
-    return res.status(401).json({ message: 'Token inválido ou expirado' });
-  }
+  };
 }

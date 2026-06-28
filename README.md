@@ -49,11 +49,19 @@ npx prisma generate
 
 ### 4. Configurar variáveis de ambiente
 
-Copie o arquivo de exemplo e ajuste se necessário:
+Copie o arquivo de exemplo e preencha com uma chave segura:
 
 ```bash
 cp .env.example .env
 ```
+
+Para gerar uma chave JWT segura:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Cole o resultado no `.env` no campo `JWT_SECRET`.
 
 ### 5. Criar e popular o banco de dados
 

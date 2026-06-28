@@ -38,6 +38,13 @@
       "senha": "Leonardo@123"
     }
   ],
+  "usuarios": [
+  {
+    "nome": "Ana",
+    "email": "ana@receitoteca.com",
+    "senha": "Ana@1234"
+  }
+  ],
   "receitas": [
     {
       "img": "images/carbonara.png",
@@ -45,7 +52,7 @@
       "title": "Pasta carbonara tradicional",
       "time": 30,
       "servings": 4,
-      "chef_email": "paulo@receitoteca.com",
+      "usuario_email": "paulo@receitoteca.com",
       "ingredients": [
         "500g de macarrão",
         "4 ovos",
@@ -65,7 +72,7 @@
       "title": "Bolo de brigadeiro belga",
       "time": 60,
       "servings": 8,
-      "chef_email": "sandra@receitoteca.com",
+      "usuario_email": "sandra@receitoteca.com",
       "ingredients": [
         "Chocolate belga",
         "Leite condensado",
@@ -85,7 +92,7 @@
       "title": "Salada simples",
       "time": 15,
       "servings": 2,
-      "chef_email": "gabriela@receitoteca.com",
+      "usuario_email": "gabriela@receitoteca.com",
       "ingredients": [
         "Alface",
         "Tomate",
@@ -104,7 +111,7 @@
       "title": "Panquecas americanas",
       "time": 25,
       "servings": 4,
-      "chef_email": "leonardo@receitoteca.com",
+      "usuario_email": "leonardo@receitoteca.com",
       "ingredients": [
         "Farinha",
         "Leite",

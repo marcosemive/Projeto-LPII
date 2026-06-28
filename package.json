@@ -6,7 +6,7 @@
  "scripts": {
   "start": "tsx src/index.ts",
   "dev": "tsx watch src/index.ts",
-  "dev:all": "npm install && cp -n .env.example .env && npm run prisma:generate && npm run db:fresh && npm run dev",
+  "dev:all": "npm install && cp -n .env.example .env && npm run prisma:generate && npm run db:refresh && npm run dev",
 
   "db:refresh": "prisma migrate reset --force && npm run db:seed",
   "db:seed": "tsx src/database/load.ts",

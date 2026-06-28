@@ -8,35 +8,28 @@ datasource db {
   provider = "sqlite"
 }
 
-model Chef {
-  id    Int    @id @default(autoincrement())
-  nome  String
-  email String @unique
-  senha String
-
-  receitas Receita[]
-}
-
 model Usuario {
   id    Int    @id @default(autoincrement())
   nome  String
   email String @unique
   senha String
+  role  String @default("ENTUSIASTA")
 
+  receitas  Receita[]
   favoritos Favorito[]
 }
 
 model Receita {
-  id         Int    @id @default(autoincrement())
-  img        String
-  title      String
-  time       Int
-  servings   Int
+  id          Int    @id @default(autoincrement())
+  img         String
+  title       String
+  time        Int
+  servings    Int
   ingredients String
   steps       String
 
-  chef_id Int
-  chef    Chef @relation(fields: [chef_id], references: [id])
+  usuario_id Int
+  usuario    Usuario @relation(fields: [usuario_id], references: [id])
 
   etiquetas ReceitaEtiqueta[]
   favoritos Favorito[]
