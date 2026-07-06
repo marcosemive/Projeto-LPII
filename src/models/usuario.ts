@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import {hashPassword, verifyPassword} from '@/utils/password';
 import { prisma } from '@/database/prisma.js';
 import type { Usuario, UsuarioCreateInput, UsuarioUpdateInput } from '@/types/Usuario.d.ts';
 
@@ -9,7 +9,7 @@ async function create(data: UsuarioCreateInput): Promise<Usuario> {
     const jaExiste = await prisma.usuario.findUnique({ where: { email } });
     if (jaExiste) throw new Error('E-mail já cadastrado');
 
-    const hash = await bcrypt.hash(senha, 10);
+    const hash = await hashPassword(senha);
 
     const usuario = await prisma.usuario.create({
       data: { nome, email, senha: hash, role: role ?? 'ENTUSIASTA' },

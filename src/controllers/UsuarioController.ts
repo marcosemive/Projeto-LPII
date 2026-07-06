@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import { verifyPassword } from '@/utils/password';
 import UsuarioModel from '@/models/usuario.js';
 import { gerarToken } from '@/middlewares/auth.js';
 import type { UsuarioCreateInput } from '@/types/Usuario.d.ts';
@@ -27,7 +27,7 @@ export async function loginUsuario(email: string, senha: string) {
   const usuario = await UsuarioModel.readByEmail(email);
   if (!usuario || usuario.role !== 'ENTUSIASTA') throw new Error('E-mail ou senha inválidos');
 
-  const senhaCorreta = await bcrypt.compare(senha, usuario.senha!);
+  const senhaCorreta = await verifyPassword(senha, usuario.senha);
   if (!senhaCorreta) throw new Error('E-mail ou senha inválidos');
 
   const token = gerarToken({ id: usuario.id, nome: usuario.nome, role: usuario.role });
@@ -38,7 +38,7 @@ export async function loginChef(email: string, senha: string) {
   const usuario = await UsuarioModel.readByEmail(email);
   if (!usuario || usuario.role !== 'CHEF') throw new Error('E-mail ou senha inválidos');
 
-  const senhaCorreta = await bcrypt.compare(senha, usuario.senha!);
+  const senhaCorreta = await verifyPassword(senha, usuario.senha);
   if (!senhaCorreta) throw new Error('E-mail ou senha inválidos');
 
   const token = gerarToken({ id: usuario.id, nome: usuario.nome, role: usuario.role });

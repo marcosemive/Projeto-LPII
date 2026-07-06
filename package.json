@@ -2,21 +2,20 @@
   "name": "receitoteca-api",
   "version": "1.0.0",
   "type": "module",
-  
- "scripts": {
-  "start": "tsx src/index.ts",
-  "dev": "tsx watch src/index.ts",
-  "dev:all": "npm install && cp -n .env.example .env && npm run prisma:generate && npm run db:refresh && npm run dev",
-
-  "db:refresh": "prisma migrate reset --force && npm run db:seed",
-  "db:seed": "tsx src/database/load.ts",
-  "build": "tsc",
-  "prisma:generate": "prisma generate",
-  "prisma:studio": "prisma studio"
-},
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "dev:all": "npm install && cp -n .env.example .env && npm run prisma:generate && npm run db:refresh && npm run dev",
+    "db:refresh": "prisma migrate reset --force && npm run db:seed",
+    "db:seed": "tsx src/database/load.ts",
+    "build": "tsc",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio"
+  },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "argon2": "^0.44.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

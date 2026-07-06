@@ -20,29 +20,29 @@
     {
       "nome": "Paulo Benetton",
       "email": "paulo@receitoteca.com",
-      "senha": "Paulo@123"
+      "senha": "$argon2id$v=19$m=65536,t=3,p=4$Q7TUo4TEjS5kkC12hUN20w$a5EkDGBKKrfNYXv2XB78VOEesTEtzXuaEtHWJolFydA"
     },
     {
       "nome": "Sandra Freitas",
       "email": "sandra@receitoteca.com",
-      "senha": "Sandra@123"
+      "senha": "$argon2id$v=19$m=65536,t=3,p=4$voLaiAREcn9yTXsqDyMJbg$pABv3xJ7WYPpvX8DyhhaA7QCzWV6JVLUigXvmXnDuC4"
     },
     {
       "nome": "Gabriela Carvalho",
       "email": "gabriela@receitoteca.com",
-      "senha": "Gabriela@123"
+      "senha": "$argon2id$v=19$m=65536,t=3,p=4$04rCmjEQ7tCFtqiNgc7RDQ$yhtw086dOpTDsn3BK46zRHgU/DXFLuywFrNm8H8kZlk"
     },
     {
       "nome": "Leonardo Matias",
       "email": "leonardo@receitoteca.com",
-      "senha": "Leonardo@123"
+      "senha": "$argon2id$v=19$m=65536,t=3,p=4$VJfBeL4ZclYXYJZ3IUyAag$3sTXbvJ3Wjp6rjE34LFI58lPJQmZnMwhuZP1dy9MMnk"
     }
   ],
   "usuarios": [
   {
     "nome": "Ana",
     "email": "ana@receitoteca.com",
-    "senha": "Ana@1234"
+    "senha": "$argon2id$v=19$m=65536,t=3,p=4$DWIVifI1A+EqsvDND1wE6g$tSykYdOeBpjomkXrgEdolRkmeajUR2B6zBJwGkZunq0"
   }
   ],
   "receitas": [
