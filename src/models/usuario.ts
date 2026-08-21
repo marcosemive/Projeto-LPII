@@ -1,4 +1,4 @@
-import {hashPassword, verifyPassword} from '@/utils/password';
+import {hashPassword, verifyPassword, validarForcaSenha} from '@/utils/password';
 import { prisma } from '@/database/prisma.js';
 import type { Usuario, UsuarioCreateInput, UsuarioUpdateInput } from '@/types/Usuario.d.ts';
 
@@ -10,6 +10,8 @@ async function create(data: UsuarioCreateInput): Promise<Usuario> {
     if (jaExiste) throw new Error('E-mail já cadastrado');
 
     const hash = await hashPassword(senha);
+
+     validarForcaSenha(senha);
 
     const usuario = await prisma.usuario.create({
       data: { nome, email, senha: hash, role: role ?? 'ENTUSIASTA' },

@@ -46,7 +46,11 @@ async function create(data: ReceitaCreateInput): Promise<Receita> {
     if (usuario) resolvedUsuarioId = usuario.id;
   }
 
-  if (img && tagsInput && title && time && servings && ingredients && steps && resolvedUsuarioId) {
+  const ingredientsArr = Array.isArray(ingredients) ? ingredients : [];
+  const stepsArr = Array.isArray(steps) ? steps : [];
+  const tagsArr = Array.isArray(tagsInput) ? tagsInput : (tagsInput ? [tagsInput] : []);
+
+  if (img && tagsArr.length > 0 && title && time && servings && ingredientsArr.length > 0 && stepsArr.length > 0 && resolvedUsuarioId) {
     if (title.trim() === 'Nome da Receita') {
       throw new Error('Por favor, altere o nome da receita');
     }
@@ -116,7 +120,11 @@ async function update(data: ReceitaUpdateInput): Promise<Receita> {
   const tagsInput = etiquetas || etiqueta;
   const ownerId = usuario_id;
 
-  if (id && img && tagsInput && title && time && servings && ingredients && steps) {
+  const ingredientsArr = Array.isArray(ingredients) ? ingredients : [];
+  const stepsArr = Array.isArray(steps) ? steps : [];
+  const tagsArr = Array.isArray(tagsInput) ? tagsInput : (tagsInput ? [tagsInput] : []);
+
+  if (id && img && tagsArr.length > 0 && title && time && servings && ingredientsArr.length > 0 && stepsArr.length > 0) {
     const atual = await prisma.receita.findUnique({ where: { id } });
     if (!atual) throw new Error('Receita não encontrada');
     if (ownerId && atual.usuario_id !== ownerId) throw new Error('Sem permissão para editar esta receita');

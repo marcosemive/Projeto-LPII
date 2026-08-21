@@ -33,11 +33,23 @@ Content-Type: application/json
 ### Cadastro de Usuário
 POST {{server}}/api/auth/usuario/cadastro
 Content-Type: application/json
-
+  
 {
   "nome": "Marcos Lima",
   "email": "marcos@receitoteca.com",
   "senha": "Marcos@1234"
+}
+
+###
+
+### Cadastro de Usuário com senha fraca (não atende aos requisitos mínimos)
+POST {{server}}/api/auth/usuario/cadastro
+Content-Type: application/json
+
+{
+  "nome": "Senha Fraca",
+  "email": "senhafraca@receitoteca.com",
+  "senha": "123"
 }
 
 ###
@@ -139,7 +151,7 @@ Authorization: Bearer {{tokenChef}}
 ###
 
 ### Listar receitas do chef logado
-GET {{server}}/api/chef/receitas
+GET {{server}}/api/receitas/chef/minhas
 Authorization: Bearer {{tokenChef}}
 
 ###

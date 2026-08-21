@@ -190,6 +190,4 @@ export function initFormEtiquetas() {
   initEtiquetasDropdown();
 }
 
-window.abrirFormCriar = abrirFormCriar;
-window.abrirFormEditar = abrirFormEditar;
 window.editarReceita = editarReceita;

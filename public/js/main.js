@@ -1,16 +1,16 @@
 import { initBusca, abrirReceita, fecharReceita, renderizarCards } from './modules/ui.js';
-import { abrirFormCriar, salvarReceita, initFormEtiquetas } from './modules/chef.js';
+import { abrirFormCriar, abrirFormEditar, salvarReceita, initFormEtiquetas } from './modules/chef.js';
 import { initNavegacao } from './modules/navegacao.js';
 import { fecharForm, initUploadFoto } from './modules/utils.js';
 import { getReceitas } from './api.js';
+
 
 const token = localStorage.getItem('token');
 const tipo = localStorage.getItem('tipo');
 
 if (!token) {
-  window.location.href = 'login.html';
+  window.location.replace('login.html');
 }
-
 document.addEventListener('DOMContentLoaded', async () => {
   const receitas = await getReceitas();
   const grid = document.querySelector('#receitas .recipes-grid');
