@@ -68,6 +68,22 @@ Content-Type: application/json
 
 @tokenUsuario = {{loginUsuario.response.body.token}}
 
+### Usuário comum tentando criar receita
+POST {{server}}/api/receitas
+Content-Type: application/json
+Authorization: Bearer {{tokenUsuario}}
+
+{
+  "img": "images/teste.jpg",
+  "etiquetas": ["Salgada"],
+  "title": "Receita criada por usuário comum",
+  "time": 10,
+  "servings": 1,
+  "ingredients": ["Item 1"],
+  "steps": ["Passo 1"]
+}
+###
+
 ### ETIQUETAS
 
 ### Listar todas as etiquetas
@@ -116,31 +132,30 @@ Authorization: Bearer {{tokenChef}}
 ###
 
 ### Atualizar receita pelo ID (requer token do chef dono)
-PUT {{server}}/api/receitas/3
+PUT {{server}}/api/receitas/1
 Content-Type: application/json
 Authorization: Bearer {{tokenChef}}
 
 {
-  "img": "images/salada.png",
-  "etiquetas": ["Vegana", "Sem Glúten", "Poucas Calorias"],
-  "title": "Salada Tropical",
-  "time": 15,
-  "servings": 2,
-  "ingredients": [
-    "Alface",
-    "Tomate cereja",
-    "Pepino",
-    "Cebola",
-    "Manga",
-    "Maçã",
-    "Azeite e sal"
-  ],
-  "steps": [
-    "Lave os ingredientes",
-    "Corte tudo",
-    "Tempere e sirva"
-  ]
-}
+      "img": "images/carbonara.png",
+      "etiqueta": "Salgada",
+      "title": "Pasta com queijo parmesão e ovos",
+      "time": 30,
+      "servings": 4,
+      "usuario_email": "paulo@receitoteca.com",
+      "ingredients": [
+        "500g de macarrão",
+        "4 ovos",
+        "Queijo parmesão",
+        "Pimenta-do-reino"
+      ],
+      "steps": [
+        "Cozinhe o macarrão",
+        "Misture ovos e queijo",
+        "Incorpore tudo ainda quente",
+        "Finalize com pimenta"
+      ]
+    }
 
 ###
 
@@ -166,12 +181,14 @@ Authorization: Bearer {{tokenUsuario}}
 
 ### Favoritar uma receita pelo ID
 POST {{server}}/api/favoritos/2
+Content-Type: application/json
 Authorization: Bearer {{tokenUsuario}}
 
 ###
 
 ### Desfavoritar uma receita pelo ID
 DELETE {{server}}/api/favoritos/2
+Content-Type: application/json
 Authorization: Bearer {{tokenUsuario}}
 
 ###
